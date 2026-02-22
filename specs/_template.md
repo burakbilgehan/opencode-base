@@ -3,6 +3,11 @@
 ## Status
 draft
 
+## Metadata
+- **Created**: YYYY-MM-DD
+- **Updated**: YYYY-MM-DD
+- **Author**: _who requested/wrote this spec_
+
 ## Problem
 _What problem does this solve? Why does it matter?_
 

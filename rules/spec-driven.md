@@ -14,6 +14,11 @@ Spec files live in `specs/` and follow the template at `specs/_template.md`:
 ## Status
 draft | in-progress | review | done | cancelled
 
+## Metadata
+- **Created**: YYYY-MM-DD
+- **Updated**: YYYY-MM-DD
+- **Author**: who requested/wrote this spec
+
 ## Problem
 What problem does this solve? Why does it matter?
 
@@ -54,11 +59,12 @@ What are we explicitly NOT doing?
 
 ## E2E Pipeline
 
-Use `/pipeline <idea>` for the full automated flow: Assess → Spec → Architect → Implement → Verify → Finalize.
+The full development pipeline is defined in the `e2e-pipeline` skill (`.opencode/skills/e2e-pipeline/SKILL.md`). Load it with `/pipeline <idea>` for the full automated flow.
 
-The pipeline is NOT linear — verification failures route back to the appropriate stage (spec, architect, or implement) until all criteria are proven.
-
-For detailed pipeline stages, gates, routing rules, and verification protocol, load the `e2e-pipeline` skill.
+Key points:
+- **Stages**: Assess → Spec → Architect → Implement → Verify → Finalize
+- The pipeline is **NOT linear** — verification failures route back to the appropriate stage
+- For detailed stages, gates, routing rules, and verification protocol, load the `e2e-pipeline` skill
 
 ## Rules
 

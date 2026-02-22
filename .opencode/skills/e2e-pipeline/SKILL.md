@@ -92,15 +92,7 @@ For each acceptance criterion, build this assessment:
 
 ## Spec Workflow
 
-### Spec Statuses
-
-| Status | Meaning |
-|--------|---------|
-| `draft` | Initial creation, not yet reviewed |
-| `in-progress` | Actively being implemented |
-| `review` | Implementation complete, needs verification |
-| `done` | All criteria PROVEN and accepted |
-| `cancelled` | Abandoned or superseded |
+Spec statuses and file format are defined in `rules/spec-driven.md`. The template is at `specs/_template.md`.
 
 ### Creating a New Spec
 

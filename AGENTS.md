@@ -27,22 +27,11 @@ This is a personal project workspace optimized for spec-driven development with 
 
 ## Core Workflow: E2E Pipeline
 
-Every feature follows this pipeline. It is NOT linear — verification routes back to the appropriate stage on failure.
+Every feature follows a non-linear pipeline with feedback loops. Verification failures route back to the appropriate stage.
 
-```
-Raw Idea --> /pipeline
-  │
-  ├── 1. ASSESS     - What do we have? Start from scratch or resume?
-  ├── 2. SPEC       - Define problem, acceptance criteria (min 3 testable)
-  ├── 3. ARCHITECT  - Design approach, file structure, interfaces
-  ├── 4. IMPLEMENT  - Write code + tests for each criterion
-  ├── 5. VERIFY     - Prove each criterion with evidence
-  │      ├── Spec gap?    → back to 2
-  │      ├── Design flaw? → back to 3
-  │      ├── Code bug?    → back to 4
-  │      └── ALL PROVEN   → continue to 6
-  └── 6. FINALIZE   - Document, summarize, deliver
-```
+**Stages**: Assess → Spec → Architect → Implement → Verify → Finalize
+
+For detailed pipeline stages, gates, routing rules, and verification protocol, load the `e2e-pipeline` skill or see `.opencode/skills/e2e-pipeline/SKILL.md`.
 
 ### Quick Commands
 

@@ -9,7 +9,27 @@ tools:
   read: true
 permission:
   bash:
-    "*": allow
+    "*": "ask"
+    "git *": allow
+    "npm *": allow
+    "npx *": allow
+    "bun *": allow
+    "node *": allow
+    "tsc *": allow
+    "eslint *": allow
+    "prettier *": allow
+    "vitest *": allow
+    "jest *": allow
+    "ls*": allow
+    "dir*": allow
+    "cat *": allow
+    "grep *": allow
+    "rg *": allow
+    "find *": allow
+    "which *": allow
+    "where *": allow
+    "echo *": allow
+    "mkdir *": allow
 ---
 
 You are an implementation specialist. Your job is to write clean, tested production code that satisfies spec acceptance criteria.

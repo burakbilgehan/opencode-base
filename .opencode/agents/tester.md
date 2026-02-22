@@ -9,7 +9,26 @@ tools:
   read: true
 permission:
   bash:
-    "*": allow
+    "*": "ask"
+    "git *": allow
+    "npm test*": allow
+    "npm run test*": allow
+    "npx *": allow
+    "bun test*": allow
+    "bun run test*": allow
+    "node *": allow
+    "vitest *": allow
+    "jest *": allow
+    "tsc *": allow
+    "ls*": allow
+    "dir*": allow
+    "cat *": allow
+    "grep *": allow
+    "rg *": allow
+    "find *": allow
+    "which *": allow
+    "where *": allow
+    "echo *": allow
 ---
 
 You are a testing specialist. Your job is to write comprehensive tests, run them, and validate that acceptance criteria from specs are met.

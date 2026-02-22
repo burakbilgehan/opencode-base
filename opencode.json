@@ -18,7 +18,32 @@
 
   "permission": {
     "edit": "allow",
-    "bash": "allow",
+    "bash": {
+      "*": "ask",
+      "git *": "allow",
+      "npm *": "allow",
+      "npx *": "allow",
+      "bun *": "allow",
+      "node *": "allow",
+      "tsc *": "allow",
+      "eslint *": "allow",
+      "prettier *": "allow",
+      "vitest *": "allow",
+      "jest *": "allow",
+      "ls*": "allow",
+      "dir*": "allow",
+      "cat *": "allow",
+      "grep *": "allow",
+      "rg *": "allow",
+      "find *": "allow",
+      "which *": "allow",
+      "where *": "allow",
+      "echo *": "allow",
+      "rm *": "ask",
+      "del *": "ask",
+      "curl *": "ask",
+      "wget *": "ask"
+    },
     "skill": {
       "*": "allow"
     }
@@ -32,7 +57,24 @@
     "plan": {
       "mode": "primary",
       "description": "Read-only analysis and planning. Cannot modify files. Use Tab to switch.",
-      "temperature": 0.1
+      "temperature": 0.1,
+      "tools": {
+        "write": false,
+        "edit": false
+      },
+      "permission": {
+        "bash": {
+          "*": "deny",
+          "git status*": "allow",
+          "git log*": "allow",
+          "git diff*": "allow",
+          "git show*": "allow",
+          "git branch*": "allow",
+          "npm list*": "allow",
+          "npm outdated*": "allow",
+          "bun pm ls*": "allow"
+        }
+      }
     }
   },
 

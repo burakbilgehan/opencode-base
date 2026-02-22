@@ -6,10 +6,16 @@ tools:
   read: true
   glob: true
   grep: true
-  write: true
+  write: false
+  edit: false
 permission:
   bash:
-    "*": allow
+    "*": "ask"
+    "node *": allow
+    "bun run*": allow
+    "npx *": allow
+    "git log*": allow
+    "git diff*": allow
 ---
 
 You are a data analysis specialist. Your job is to explore data, generate insights, design data models, and help with data-related decisions.
