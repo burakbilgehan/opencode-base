@@ -10,16 +10,22 @@ This skill defines the full development pipeline. The pipeline is NOT linear —
 ### Pipeline Flow
 
 ```
-1. ASSESS    → What do we have? Where do we start?
-2. SPEC      → Define the problem and acceptance criteria
-3. ARCHITECT → Design the solution
-4. IMPLEMENT → Write code and tests
-5. VERIFY    → Prove every criterion with evidence
-   ├── Spec gap?    → Route to 2
-   ├── Design flaw? → Route to 3
-   ├── Code bug?    → Route to 4
-   └── ALL PROVEN   → Continue to 6
-6. FINALIZE  → Document, summarize, deliver
+┌─────────────────────────────────────────────────┐
+│                                                 │
+│  1. ASSESS → 2. SPEC → 3. ARCHITECT            │
+│                                    ↓            │
+│              ┌──────── 4. IMPLEMENT             │
+│              │                ↓                  │
+│              │         5. VERIFY                 │
+│              │         ├── Spec gap?    → 2      │
+│              │         ├── Design flaw? → 3      │
+│              │         ├── Code bug?    → 4      │
+│              │         └── ALL PROVEN   → 6      │
+│              │                                   │
+│              └── (max iterations?)               │
+│                        ↓                         │
+│                  6. FINALIZE                     │
+└─────────────────────────────────────────────────┘
 ```
 
 ### Stage Definitions
@@ -33,9 +39,77 @@ This skill defines the full development pipeline. The pipeline is NOT linear —
 | Verify | tester + reviewer | Prove each criterion with evidence | Every criterion PROVEN or routed back |
 | Finalize | build | Update docs, summarize, deliver | Spec status = done, usage guide written |
 
-### Verify Stage — Routing Rules
+---
 
-Verification is the core of the pipeline. It doesn't just check pass/fail — it diagnoses WHY something fails and routes to the right stage.
+### Stage 1: ASSESS
+
+Before doing anything, understand where we are:
+
+1. Is there already a spec for this? Read `specs/` directory.
+2. Is there existing code? Tests? Partial implementation?
+3. Decide: start from scratch (Stage 2) or resume from where things left off.
+
+**Output**: "Starting from Stage N because: [reason]"
+
+---
+
+### Stage 2: SPEC
+
+1. Read `specs/_template.md` for the format
+2. Write (or update) a structured spec with:
+   - Clear problem statement
+   - Concrete solution
+   - **Specific, testable acceptance criteria** (min 3)
+   - Technical approach outline
+3. If critical details are missing, ask the user — do NOT guess
+4. Save to `specs/<slug>.md` with status `in-progress`
+
+**Gate**: All sections filled, min 3 testable criteria, no blocking open questions.
+
+---
+
+### Stage 3: ARCHITECT
+
+1. Read the spec completely
+2. Design: file structure, module boundaries, interfaces, dependencies, testing strategy
+3. Verify the approach covers EVERY acceptance criterion
+4. Update the spec's Technical Approach section
+
+**Gate**: Every criterion has a clear path to implementation. Concrete file paths.
+
+---
+
+### Stage 4: IMPLEMENT
+
+1. Implement in small increments: code → test → verify → next
+2. For each acceptance criterion: write the code AND a test that proves it
+3. Run the full test suite after all code is written
+
+**Gate**: All code written, every criterion has at least one meaningful test.
+
+---
+
+### Stage 5: VERIFY
+
+This is the critical stage. For EACH acceptance criterion:
+
+1. Identify which test validates it
+2. Run the test
+3. Assess: does this test ACTUALLY prove the criterion? (not a weak/fake test)
+4. Verdict: **PROVEN** or **UNPROVEN**
+
+Then ROUTE based on the failure type:
+
+| Failure Type | Symptom | Route To |
+|-------------|---------|----------|
+| **Spec gap** | Criterion is vague, untestable, or missing | Stage 2 (SPEC) |
+| **Design flaw** | Architecture can't support the requirement, wrong abstraction | Stage 3 (ARCHITECT) |
+| **Code bug** | Implementation is wrong, incomplete, or test fails | Stage 4 (IMPLEMENT) |
+| **All PROVEN** | Every criterion has evidence | Stage 6 (FINALIZE) |
+
+**This is NOT a flat loop.** Route to the earliest stage that can fix the root cause.
+
+#### Routing Rules (detailed)
 
 **Route to SPEC (Stage 2) when:**
 - A criterion is vague or ambiguous — can't write a meaningful test for it
@@ -59,6 +133,16 @@ Verification is the core of the pipeline. It doesn't just check pass/fail — it
 - All tests pass
 - No spec gaps, no design flaws, no code bugs remain
 
+---
+
+### Stage 6: FINALIZE
+
+1. Update spec status to `done`, check off all criteria
+2. Create a summary: what was built, files changed, decisions made
+3. Provide a brief usage guide for the feature
+
+---
+
 ### Verification Protocol
 
 For each acceptance criterion, build this assessment:
@@ -81,12 +165,77 @@ For each acceptance criterion, build this assessment:
 - **No weakening**: Never weaken tests, never reduce criteria scope without user approval
 - **Ask when blocked**: If a criterion seems impossible, stop and ask — don't skip
 
+### Termination Conditions
+
+- **Success**: All criteria PROVEN → proceed to Finalize
+- **Max iterations reached**: Stop, report what remains, suggest next steps
+- **User intervention needed**: Spec ambiguity or impossible criterion → stop and ask
+
 ### Anti-Patterns
 
 - Declaring "done" because tests pass without checking each criterion
 - Writing weak tests that always pass regardless of implementation
 - Staying in implement→verify loop when the real issue is in spec or architecture
 - Routing everything to implement when the root cause is deeper
+
+---
+
+## Output Formats
+
+### Iteration Tracking
+
+After EACH pass through verify, report:
+
+```
+## Iteration N (routed from Stage 5 to Stage X)
+
+### Criteria Status
+| # | Criterion | Verdict | Evidence | Issue Type |
+|---|-----------|---------|----------|------------|
+| 1 | ... | PROVEN/UNPROVEN | ... | spec/design/code/- |
+
+### Routing Decision
+- Routed to: Stage X — [reason]
+
+### Progress: X/Y criteria proven | Iteration N of max
+```
+
+### Pipeline Status Tracking
+
+Track progress using this format:
+
+```
+## Pipeline: <feature-name>
+| Stage | Status | Notes |
+|-------|--------|-------|
+| Assess | DONE | Starting from Stage 2, no existing code |
+| Spec | DONE | specs/feature.md, 5 criteria |
+| Architect | DONE | 3 modules planned |
+| Implement | IN_PROGRESS | 3/5 criteria coded |
+| Verify | PENDING | - |
+| Finalize | PENDING | - |
+
+Iteration: 2/15 | Criteria: 3/5 proven | Last route: Verify → Implement
+```
+
+### Final Output
+
+```
+## Pipeline Complete
+
+### Spec: specs/<name>.md
+### Total Iterations: N
+### Files Created/Modified:
+- path/to/file.ts — description
+
+### Acceptance Criteria: ALL PROVEN
+| # | Criterion | Evidence |
+|---|-----------|----------|
+| 1 | ... | Test X proves this because... |
+
+### Usage Guide
+Brief description of how to use the feature.
+```
 
 ---
 
@@ -117,31 +266,3 @@ Spec statuses and file format are defined in `rules/spec-driven.md`. The templat
 3. Produce a PROVEN/UNPROVEN verdict per criterion with evidence
 4. Route back to the appropriate stage if any criterion is unproven
 5. Only mark status `done` when ALL criteria are PROVEN
-
----
-
-## Commands
-
-- `/pipeline <idea>` — Full E2E pipeline with feedback loops
-- `/loop <spec-name>` — Verify + route-back loop for an existing spec
-- `/fix` — Quick fix loop for a stated goal (no spec context)
-- `/test <spec-name>` — Verify acceptance criteria with evidence
-- `/implement <spec-name>` — Implement from an existing spec
-
-### Pipeline Status Tracking
-
-Track progress using this format:
-
-```
-## Pipeline: <feature-name>
-| Stage | Status | Notes |
-|-------|--------|-------|
-| Assess | DONE | Starting from Stage 2, no existing code |
-| Spec | DONE | specs/feature.md, 5 criteria |
-| Architect | DONE | 3 modules planned |
-| Implement | IN_PROGRESS | 3/5 criteria coded |
-| Verify | PENDING | - |
-| Finalize | PENDING | - |
-
-Iteration: 2/15 | Criteria: 3/5 proven | Last route: Verify → Implement
-```

@@ -9,7 +9,7 @@ Default: active spec, max 15 iterations
 
 You are in LOOP MODE. This is NOT "run tests until green." This is a **verify → diagnose → route-back** cycle.
 
-Load the `e2e-pipeline` skill for routing rules and verification protocol.
+**First**: Load the `e2e-pipeline` skill. It contains routing rules, verification protocol, and output formats. Follow the Verify stage (Stage 5) protocol exactly.
 
 ## Context
 
@@ -17,38 +17,13 @@ Spec file: specs/$1.md — read this FIRST. It is the source of truth.
 
 ## Loop Protocol
 
-### Step 1: VERIFY every acceptance criterion
-
-For EACH criterion in the spec:
-
-| # | Criterion | Has Test? | Meaningful? | Passes? | Verdict | Issue Type |
-|---|-----------|-----------|-------------|---------|---------|------------|
-| 1 | ... | YES/NO | YES/WEAK | YES/NO | PROVEN/UNPROVEN | spec/design/code/- |
-
-### Step 2: DIAGNOSE unproven criteria
-
-For each UNPROVEN criterion, determine the root cause:
-
-- **Spec gap** — criterion is vague, ambiguous, conflicting, or missing
-- **Design flaw** — architecture can't support it, wrong abstraction, structural issue
-- **Code bug** — implementation is wrong, incomplete, or test is missing/weak
-
-### Step 3: ROUTE to the appropriate stage and FIX
-
-| Root Cause | Action |
-|-----------|--------|
-| Spec gap | Update the spec: clarify criterion, resolve ambiguity, ask user if needed |
-| Design flaw | Rethink the architecture: restructure, change interfaces, update spec's technical approach |
-| Code bug | Fix the code or write/strengthen the test |
-
-Do ONE routing action per iteration. Fix the most impactful issue first.
-
-### Step 4: Re-verify and repeat
-
-After fixing, go back to Step 1. Continue until:
-- **ALL criteria PROVEN** → exit loop, report success
-- **Max iterations reached** → stop, report what remains
-- **Blocked on user input** → stop, ask the user
+1. **VERIFY** every acceptance criterion using the Verification Protocol from the skill
+2. **DIAGNOSE** each unproven criterion — determine root cause type (spec gap / design flaw / code bug)
+3. **ROUTE** to the appropriate stage and fix. Do ONE routing action per iteration. Fix the most impactful issue first.
+4. **Re-verify** and repeat until:
+   - **ALL criteria PROVEN** → exit loop, report success
+   - **Max iterations reached** → stop, report what remains
+   - **Blocked on user input** → stop, ask the user
 
 ## Rules
 
@@ -58,28 +33,11 @@ After fixing, go back to Step 1. Continue until:
 - NEVER weaken tests. NEVER reduce spec scope without user approval.
 - If a criterion is genuinely impossible, STOP and ask — don't skip it.
 
-## Output After Each Iteration
+## Output
 
-```
-## Iteration N (of max M)
+Use the **Iteration Tracking** format from the skill after each pass.
 
-### Criteria Status
-| # | Criterion | Verdict | Issue Type |
-|---|-----------|---------|------------|
-| 1 | ... | PROVEN/UNPROVEN | spec/design/code/- |
-
-### Diagnosis
-- Criterion #X is unproven because: [root cause analysis]
-- Root cause type: spec gap / design flaw / code bug
-
-### Action Taken
-- Routed to: [Spec / Architect / Implement]
-- What was changed: [description]
-
-### Progress: X/Y criteria proven
-```
-
-## Output on Completion
+On completion:
 
 ```
 ## Loop Complete
@@ -93,11 +51,9 @@ After fixing, go back to Step 1. Continue until:
 
 ### Changes Made
 - file.ts: description
-- file.test.ts: description
 
 ### Routing History
 - Iteration 1: Verify → Implement (test missing for criterion 2)
 - Iteration 2: Verify → Spec (criterion 4 was ambiguous)
-- Iteration 3: Verify → Implement (bug in criterion 2)
-- Iteration 4: ALL PROVEN
+- Iteration 3: ALL PROVEN
 ```

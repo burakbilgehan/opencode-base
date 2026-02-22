@@ -10,13 +10,11 @@ You are running a VERIFICATION, not just a test suite. Your job is to answer: **
 
 ## If a spec name is provided
 
+Load the `e2e-pipeline` skill and use the **Verification Protocol** to assess each criterion.
+
 1. Read the spec at `specs/$ARGUMENTS.md`
 2. Extract all acceptance criteria
-3. For EACH criterion:
-   a. Identify which test(s) validate this criterion (if any)
-   b. Run those tests
-   c. Assess: does the test ACTUALLY prove the criterion, or is it a weak/tangential test?
-   d. Verdict: PROVEN or UNPROVEN
+3. For EACH criterion, build the assessment table from the skill's Verification Protocol
 4. Run the full test suite for completeness (catch regressions)
 5. Produce the verification report below
 
@@ -44,9 +42,6 @@ You are running a VERIFICATION, not just a test suite. Your job is to answer: **
 - Total: N tests
 - Passed: N
 - Failed: N
-
-### Failures (if any)
-- test name: expected vs actual, root cause
 
 ### Gaps
 - Criteria without tests: [list]
