@@ -1,0 +1,42 @@
+{
+  "$schema": "https://opencode.ai/config.json",
+  "model": "anthropic/claude-sonnet-4-5",
+  "autoupdate": true,
+  "share": "manual",
+
+  "instructions": [
+    "rules/workflow.md",
+    "rules/code-standards.md",
+    "rules/spec-driven.md"
+  ],
+
+  "compaction": {
+    "auto": true,
+    "prune": true,
+    "reserved": 10000
+  },
+
+  "permission": {
+    "edit": "allow",
+    "bash": "allow",
+    "skill": {
+      "*": "allow"
+    }
+  },
+
+  "agent": {
+    "build": {
+      "mode": "primary",
+      "description": "Full development agent with all tools enabled. Default for implementation work."
+    },
+    "plan": {
+      "mode": "primary",
+      "description": "Read-only analysis and planning. Cannot modify files. Use Tab to switch.",
+      "temperature": 0.1
+    }
+  },
+
+  "watcher": {
+    "ignore": ["node_modules/**", "dist/**", ".git/**", "*.lock"]
+  }
+}
